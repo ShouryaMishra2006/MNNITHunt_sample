@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useEffect, useContext } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -38,7 +37,6 @@ export default function MyHuntsPage() {
         if (!response.ok) throw new Error("Failed to fetch hunts");
        
         const data = await response.json();
-        console.log(data)
         if (data.statusCode === 200) {
           setHunts(data.data);
         } else {
@@ -59,16 +57,19 @@ export default function MyHuntsPage() {
     }
   
     fetchHunts();
-  }, [user]); 
+  }, [user]);
+
   useEffect(() => {
     async function fetchParticipants() {
       if (!selectedHunt) return;
 
       try {
         const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/getParticipants/${selectedHunt}`);
+        console.log(response)
         if (!response.ok) throw new Error("Failed to fetch participants");
 
         const data = await response.json();
+        console.log(data.data)
         if (data.statusCode === 200) {
           setParticipants(data.data);
         } else {
@@ -89,7 +90,7 @@ export default function MyHuntsPage() {
     }
 
     fetchParticipants();
-  }, [selectedHunt,user]);
+  }, [selectedHunt, user]);
 
   const handleResponseApproval = async (responseId, approved) => {
     try {
@@ -175,9 +176,10 @@ export default function MyHuntsPage() {
                   </TabsList>
                   
                   <TabsContent value="participants" className="p-6">
-                    <ParticipantList
+                    <ParticipantList 
+                      huntId={selectedHunt} 
                       participants={participants}
-                      onParticipantSelect={setSelectedParticipant}
+                      onParticipantSelect={setSelectedParticipant} 
                       selectedParticipantId={selectedParticipant}
                     />
                   </TabsContent>
@@ -200,9 +202,7 @@ export default function MyHuntsPage() {
               </Card>
             </div>
 
-            <div className="space-y-6">
-              <HuntLeaderboard huntId={selectedHunt} />
-            </div>
+            
           </div>
         </div>
       </div>

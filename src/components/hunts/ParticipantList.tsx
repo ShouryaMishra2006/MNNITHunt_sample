@@ -1,48 +1,37 @@
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
-import { User2, MapPin, Image as ImageIcon, CheckCircle2, Clock } from "lucide-react";
+import { User2, MapPin, CheckCircle2, Clock } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-// Mock data
-const MOCK_PARTICIPANTS = [
-  {
-    id: 1,
-    name: "Shourya Mishra",
-    progress: 4,
-    totalPuzzles: 5,
-    lastActive: "2 mins ago",
-    responses: 8,
-    approved: 6,
-  },
-  {
-    id: 2,
-    name: "Vatsal Kumar",
-    progress: 3,
-    totalPuzzles: 5,
-    lastActive: "15 mins ago",
-    responses: 6,
-    approved: 4,
-  },
-];
+type Participant = {
+  id: number;
+  firstName: string;
+  progress: number;
+  totalPuzzles: number;
+  lastActive: string;
+  responses: number;
+  approved: number;
+};
 
 type ParticipantListProps = {
   huntId: number;
+  participants: Participant[];
   onParticipantSelect: (id: number) => void;
   selectedParticipantId: number | null;
 };
 
 export function ParticipantList({ 
   huntId, 
+  participants, 
   onParticipantSelect,
   selectedParticipantId 
 }: ParticipantListProps) {
   return (
     <ScrollArea className="h-[600px] pr-4">
       <div className="space-y-4">
-        {MOCK_PARTICIPANTS.map((participant) => {
+        {participants.map((participant) => {
           const progress = (participant.progress / participant.totalPuzzles) * 100;
           const isSelected = participant.id === selectedParticipantId;
-
           return (
             <Button
               key={participant.id}
@@ -60,7 +49,7 @@ export function ParticipantList({
                 
                 <div className="text-left space-y-2">
                   <div>
-                    <h4 className="font-medium">{participant.name}</h4>
+                  <h2 className="font-medium text-emerald-700">{participant.firstName}name</h2>
                     <p className="text-sm text-gray-400">
                       <Clock className="w-3 h-3 inline mr-1" />
                       {participant.lastActive}
